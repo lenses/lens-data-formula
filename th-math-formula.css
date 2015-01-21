@@ -1,7 +1,7 @@
 core-selector {
   min-height: 10px;
   display: inline-block;
-  max-height: 123px;
+  max-height: 83px;
   overflow-y: scroll; 
   -webkit-appearance: 
 }

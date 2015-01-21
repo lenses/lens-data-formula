@@ -26,7 +26,7 @@ A Thelma component for applying mathematical functions on input.
 
             <p class="info">Calculate a mathematical formula based on column values</p>
             <label>Formula:</label>
-            <input is="core-input" id="formula" value="{{formula}}" class="formula" on-change="{{}}" placeHolder="e.g. (col1 + col2) + min(col3, col4) " >
+            <input is="core-input" id="formula" value="{{formula}}" class="formula" on-change="{{}}" placeHolder="e.g. col1 + col2" >
             <label>Name of the new calculated column:</label>
             <input is="core-input" commitedValue="{{colName}}" value="result">            
             <label>Available columns:</label>
@@ -36,7 +36,7 @@ A Thelma component for applying mathematical functions on input.
               </template>
             </core-selector>
             <label>Available functions:</label>
-            <core-selector id="func_selector" selected="{{_funcSelected}}" valueattr="label">
+            <core-selector id="func_selector" selected="{{_selectedFunc}}" valueattr="label">
               <template repeat="{{func in _functions}}">
                 <div class="col" label="{{func}}">{{func}}</div>
               </template>
@@ -51,8 +51,8 @@ A Thelma component for applying mathematical functions on input.
 
       colName: 'result',
 
-      _functions: [ 'sqrt() ','log()', 'exp()' ,'abs()', 'round()', 'ceil()' ,'floor()',
-                    'sin()', 'cos()', 'tan()', 'asin()', 'acos()', 'atan())'  ],
+      _functions: [ 'sqrt(x)','log(x)', 'exp(x)' ,'abs(x)', 'round(x)', 'ceil(x)' ,'floor(x)',
+                    'sin(x)', 'cos(x)', 'tan(x)', 'asin(x)', 'acos(x)', 'atan(x)'  ],
 
       domReady: function() {
         var self = this;
@@ -63,6 +63,11 @@ A Thelma component for applying mathematical functions on input.
         this.$.col_selector.addEventListener('core-select', function(e) {
           self._colSelected(e).bind(self);
         });
+
+        this.$.func_selector.addEventListener('core-select', function(e) {
+          self._funcSelected(e).bind(self);
+        });
+
       },
       _calculateOutput: function() {
 
@@ -121,22 +126,25 @@ A Thelma component for applying mathematical functions on input.
 
       _colSelected: function(e) {
         var self = this;
-        console.log(e);
-        console.log(e.detail.isSelected);
         if(!e.detail.isSelected) {
           return;
         }
-
-        console.log('selectedCol ', self._selectedCol);
         if(self._selectedCol) {
           self.formula = (self.formula===undefined ? '' : self.formula).concat(' '+self._selectedCol+' ');
-
         }
         self.$.formula.focus();
 
-
-
-
+      },
+      _funcSelected: function(e) {
+        var self = this;
+        if(!e.detail.isSelected) {
+          return;
+        }
+        if(self._selectedFunc) {
+          self.formula = (self.formula===undefined ? '' : 
+            self.formula).concat(' '+self._selectedFunc.substring(0, self._selectedFunc.length-2)+' ');
+        }
+        self.$.formula.focus();
 
       },
       colNameChanged: function() {
