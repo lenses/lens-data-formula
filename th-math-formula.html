@@ -28,17 +28,17 @@ A Thelma component for applying mathematical functions on input.
             <label>Formula:</label>
             <input is="core-input" id="formula" value="{{formula}}" class="formula" on-change="{{}}" placeHolder="e.g. (col1 + col2) + min(col3, col4) " >
             <label>Name of the new calculated column:</label>
-            <input is="core-input" commitedValue="{{colName}}">            
+            <input is="core-input" commitedValue="{{colName}}" value="result">            
             <label>Available columns:</label>
-            <core-selector id="col_selector" selected="{{_selectedCol}}"valueattr="label">
+            <core-selector id="col_selector" selected="{{_selectedCol}}" valueattr="label">
               <template repeat="{{attr in _dataAttributes}}">
                 <div class="col" label="{{attr}}">{{attr}}</div>
               </template>
             </core-selector>
             <label>Available functions:</label>
             <core-selector id="func_selector" selected="{{_funcSelected}}" valueattr="label">
-              <template repeat="{{func in _dataAttributes}}">
-                <div class="col" label="{{func.label}}">{{func.name}}</div>
+              <template repeat="{{func in _functions}}">
+                <div class="col" label="{{func}}">{{func}}</div>
               </template>
             </core-selector>
 
@@ -48,8 +48,12 @@ A Thelma component for applying mathematical functions on input.
     Polymer({
 
       input: [{a: 2, b: 5},{a: 6, b: 10} ],
+
       colName: 'result',
-      //_selectedCol: 0,
+
+      _functions: [ 'sqrt() ','log()', 'exp()' ,'abs()', 'round()', 'ceil()' ,'floor()',
+                    'sin()', 'cos()', 'tan()', 'asin()', 'acos()', 'atan())'  ],
+
       domReady: function() {
         var self = this;
 
