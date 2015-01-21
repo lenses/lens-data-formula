@@ -89,15 +89,16 @@ A Thelma component for applying mathematical functions on input.
 
             self.output = self.input.map(function(item) {
               var unformatted = self.$.data_utility.unformatObject(item);
+              var ret = self.$.data_utility.unformatObject(item, false);
               try {
-                item[self.colName] = expr.evaluate(unformatted);
+                ret[self.colName] = expr.evaluate(unformatted);
               }
               catch(e) 
               {
                 console.log(e.message);
                 return;
               }
-              return item;
+              return ret;
           });
 
         }
