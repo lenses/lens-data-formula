@@ -1,0 +1,122 @@
+<link rel="import" href="../polymer/polymer.html"> 
+
+<!--
+A Thelma component for applying mathematical functions on input.
+
+##### Example
+
+    <th-math-formula></th-math-formula>
+
+@element th-math-formula
+@blurb A Thelma component for applying mathematical functions on input.
+@status alpha
+@homepage http://thelmanews.github.io/th-math-formula
+-->
+
+<polymer-element name="th-math-formula" attributes="input output">
+  <template>
+    <link rel="stylesheet" href="th-math-formula.css">
+
+    <template if="{{!included}}">
+      <core-icon-button icon="perm-data-setting" on-click="{{showControls}}"></core-icon-button>
+    </template>
+
+    <core-collapse id="ctrl_collapse">      
+
+            <p class="info">Calculate a mathematical formula based on column values</p>
+            <label>Formula:</label>
+            <input is="core-input" value="{{formula}}" class="formula" on-change="{{}}" placeHolder="e.g. (col1 + col2) + min(col3, col4) " >
+            <label>Name of the new calculated column:</label>
+            <input is="core-input" value="{{colName}}">            
+            <label>Available columns:</label>
+            <core-selector id="value_selector" on-click="{{_colSelected}}" valueattr="label">
+              <template repeat="{{attr in _dataAttributes}}">
+                <div class="col" label="{{attr}}">{{attr}}</div>
+              </template>
+            </core-selector>
+            <label>Available functions:</label>
+            <core-selector id="value_selector" selected="{{_funcSelected}}" valueattr="label">
+              <template repeat="{{func in _dataAttributes}}">
+                <div class="col" label="{{func.label}}">{{func.name}}</div>
+              </template>
+            </core-selector>
+
+  </template>
+  <script src="js/parser.js"></script>
+  <script>
+    Polymer({
+
+      input: [{a: 2, b: 5},{a: 6, b: 10} ],
+      colName: 'result',
+
+      domReady: function() {
+        //to render available columns if any
+        this.inputChanged();
+      },
+      _calculateOutput: function() {
+
+        console.log('math calculate');
+
+        var self = this;
+        if(self.input && self.formula && self.formula.length>0) {
+          try {
+            var expr = Parser.parse(self.formula);
+          }
+          catch(e) {
+            console.log(e.message);
+            return;
+          }
+          var vars = expr.variables();
+
+          console.log(expr);
+          console.log(vars);
+
+          
+
+            self.output = self.input.map(function(item) {
+              try {
+              item[self.colName] = expr.evaluate(item);
+              }
+              catch(e) 
+              {
+                console.log(e.message);
+                return;
+              }
+              return item;
+          });
+
+        }
+
+      },
+
+      inputChanged: function() {
+
+          var self = this;
+          var firstItem = self.input[0];
+          if(!firstItem) {
+            return;
+          }
+          var attributes = Object.keys(firstItem);
+          
+          if(JSON.stringify(self._dataAttributes) === JSON.stringify(attributes) ) {
+            //self._mapChartData();
+          }
+          else {
+            self._dataAttributes = attributes;
+          }
+
+          self._calculateOutput();          
+
+      },       
+
+      formulaChanged: function() {
+        this._calculateOutput();
+      },
+
+      showControls: function(e) {
+        this.$.ctrl_collapse.toggle();
+      },
+
+    });
+  </script>
+</polymer-element>
