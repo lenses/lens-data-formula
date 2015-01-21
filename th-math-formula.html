@@ -15,6 +15,7 @@ A Thelma component for applying mathematical functions on input.
 
 <polymer-element name="th-math-formula" attributes="input output">
   <template>
+    <th-data-utility id="data_utility"></th-data-utility>
     <link rel="stylesheet" href="th-math-formula.css">
 
     <template if="{{!included}}">
@@ -25,17 +26,17 @@ A Thelma component for applying mathematical functions on input.
 
             <p class="info">Calculate a mathematical formula based on column values</p>
             <label>Formula:</label>
-            <input is="core-input" value="{{formula}}" class="formula" on-change="{{}}" placeHolder="e.g. (col1 + col2) + min(col3, col4) " >
+            <input is="core-input" id="formula" value="{{formula}}" class="formula" on-change="{{}}" placeHolder="e.g. (col1 + col2) + min(col3, col4) " >
             <label>Name of the new calculated column:</label>
-            <input is="core-input" value="{{colName}}">            
+            <input is="core-input" commitedValue="{{colName}}">            
             <label>Available columns:</label>
-            <core-selector id="value_selector" on-click="{{_colSelected}}" valueattr="label">
+            <core-selector id="col_selector" selected="{{_selectedCol}}"valueattr="label">
               <template repeat="{{attr in _dataAttributes}}">
                 <div class="col" label="{{attr}}">{{attr}}</div>
               </template>
             </core-selector>
             <label>Available functions:</label>
-            <core-selector id="value_selector" selected="{{_funcSelected}}" valueattr="label">
+            <core-selector id="func_selector" selected="{{_funcSelected}}" valueattr="label">
               <template repeat="{{func in _dataAttributes}}">
                 <div class="col" label="{{func.label}}">{{func.name}}</div>
               </template>
@@ -48,14 +49,18 @@ A Thelma component for applying mathematical functions on input.
 
       input: [{a: 2, b: 5},{a: 6, b: 10} ],
       colName: 'result',
-
+      //_selectedCol: 0,
       domReady: function() {
+        var self = this;
+
         //to render available columns if any
         this.inputChanged();
+
+        this.$.col_selector.addEventListener('core-select', function(e) {
+          self._colSelected(e).bind(self);
+        });
       },
       _calculateOutput: function() {
-
-        console.log('math calculate');
 
         var self = this;
         if(self.input && self.formula && self.formula.length>0) {
@@ -74,8 +79,9 @@ A Thelma component for applying mathematical functions on input.
           
 
             self.output = self.input.map(function(item) {
+              var unformatted = self.$.data_utility.unformatObject(item);
               try {
-              item[self.colName] = expr.evaluate(item);
+                item[self.colName] = expr.evaluate(unformatted);
               }
               catch(e) 
               {
@@ -107,7 +113,31 @@ A Thelma component for applying mathematical functions on input.
 
           self._calculateOutput();          
 
-      },       
+      },  
+
+      _colSelected: function(e) {
+        var self = this;
+        console.log(e);
+        console.log(e.detail.isSelected);
+        if(!e.detail.isSelected) {
+          return;
+        }
+
+        console.log('selectedCol ', self._selectedCol);
+        if(self._selectedCol) {
+          self.formula = (self.formula===undefined ? '' : self.formula).concat(' '+self._selectedCol+' ');
+
+        }
+        self.$.formula.focus();
+
+
+
+
+
+      },
+      colNameChanged: function() {
+        this._calculateOutput();
+      },   
 
       formulaChanged: function() {
         this._calculateOutput();
