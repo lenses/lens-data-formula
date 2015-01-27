@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html"> 
+<link rel="import" href="../th-data-utility/th-data-utility.html"> 
 
 <!--
 A Thelma component for applying mathematical functions on input.
@@ -82,23 +83,20 @@ A Thelma component for applying mathematical functions on input.
           }
           var vars = expr.variables();
 
-          console.log(expr);
-          console.log(vars);
-
-          
 
             self.output = self.input.map(function(item) {
-              var unformatted = self.$.data_utility.unformatObject(item);
-              var ret = self.$.data_utility.unformatObject(item, false);
+              var clone = self.$.data_utility.clone(item);
+              var unformatted = self.$.data_utility.unformatObject(clone);
+              //var ret = self.$.data_utility.unformatObject(clone, false);
               try {
-                ret[self.colName] = expr.evaluate(unformatted);
+                clone[self.colName] = expr.evaluate(unformatted);
               }
               catch(e) 
               {
                 console.log(e.message);
                 return;
               }
-              return ret;
+              return clone;
           });
 
         }
