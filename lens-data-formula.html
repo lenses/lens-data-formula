@@ -1,23 +1,23 @@
 <link rel="import" href="../polymer/polymer.html"> 
-<link rel="import" href="../th-data-utility/th-data-utility.html"> 
+<link rel="import" href="../lens-u-data-utility/lens-u-data-utility.html"> 
 
 <!--
 A Thelma component for applying mathematical functions on input.
 
 ##### Example
 
-    <th-math-formula></th-math-formula>
+    <lens-data-formula></lens-data-formula>
 
-@element th-math-formula
+@element lens-data-formula
 @blurb A Thelma component for applying mathematical functions on input.
 @status alpha
-@homepage http://thelmanews.github.io/th-math-formula
+@homepage http://lenses.github.io/lens-data-formula
 -->
 
-<polymer-element name="th-math-formula" attributes="input output formula resultColumnName">
+<polymer-element name="lens-data-formula" attributes="input output formula resultColumnName">
   <template>
-    <th-data-utility id="data_utility"></th-data-utility>
-    <link rel="stylesheet" href="th-math-formula.css">
+    <lens-u-data-utility id="data_utility"></lens-u-data-utility>
+    <link rel="stylesheet" href="lens-data-formula.css">
 
     <template if="{{!included}}">
       <core-icon-button icon="perm-data-setting" on-click="{{showControls}}"></core-icon-button>
