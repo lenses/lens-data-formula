@@ -1,3 +1,3 @@
-# th-math-formula
+# lens-data-formula
 
-See the [component page](http://thelmanews.github.io/th-math-formula) for more information.
+See the [component page](http://lenses.github.io/lens-data-formula) for more information.
