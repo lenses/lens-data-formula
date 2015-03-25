@@ -4,14 +4,14 @@
 <link rel="import" href="../core-input/core-input.html"> 
 
 <!--
-A Thelma component for applying mathematical functions on input.
+A data transform component for applying a mathematical formula on input.
 
 ##### Example
 
     <lens-data-formula></lens-data-formula>
 
 @element lens-data-formula
-@blurb A Thelma component for applying mathematical functions on input.
+@blurb A data transform component for applying mathematical formula on input.
 @status alpha
 @homepage http://lenses.github.io/lens-data-formula
 -->
@@ -45,7 +45,8 @@ A Thelma component for applying mathematical functions on input.
   <script>
     Polymer({
 
-      input: [{a: 2, b: 5},{a: 6, b: 10} ],
+      input: [],
+      output: [],
 
       resultColumnName: 'result',
 
