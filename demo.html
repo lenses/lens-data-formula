@@ -51,12 +51,6 @@
         border-bottom: 1px solid #E5E5E5 !important;
       }
 
-      .count {
-        float: right;
-        font-size: 12px;
-      }
-      
-
     </style>
 
     <script>
@@ -74,7 +68,7 @@
 
     <template id="auto-bind-demo" is="auto-binding">
       <section>
-        <label>Input:</label><span class="count">{{myinput.length}} records</span>
+        <label>Input:</label>
         <pre id="input">{{myinput | json}}</pre>
       </section>
       <section class="component">
@@ -82,7 +76,7 @@
           <lens-data-formula id="component" input="{{myinput}}" output="{{myoutput}}"></lens-data-formula>
       </section>
       <section>
-        <label>Output:</label><span class="count">{{myoutput.length}} records</span>
+        <label>Output:</label>
         <pre>{{myoutput | json}}</pre>
       </section>
 
