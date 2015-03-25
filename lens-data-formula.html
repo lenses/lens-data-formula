@@ -1,5 +1,7 @@
 <link rel="import" href="../polymer/polymer.html"> 
 <link rel="import" href="../lens-u-data-utility/lens-u-data-utility.html"> 
+<link rel="import" href="../core-selector/core-selector.html"> 
+<link rel="import" href="../core-input/core-input.html"> 
 
 <!--
 A Thelma component for applying mathematical functions on input.
@@ -19,12 +21,7 @@ A Thelma component for applying mathematical functions on input.
     <lens-u-data-utility id="data_utility"></lens-u-data-utility>
     <link rel="stylesheet" href="lens-data-formula.css">
 
-    <template if="{{!included}}">
-      <core-icon-button icon="perm-data-setting" on-click="{{showControls}}"></core-icon-button>
-    </template>
-
-    <core-collapse id="ctrl_collapse">      
-
+      <div class="lens-container lens-data">
             <p class="info">Calculate a mathematical formula based on column values</p>
             <label>Formula:</label>
             <input is="core-input" id="formula" value="{{formula}}" class="formula" on-change="{{}}" placeHolder="e.g. col1 + col2" >
@@ -42,7 +39,7 @@ A Thelma component for applying mathematical functions on input.
                 <div class="col" label="{{func}}">{{func}}</div>
               </template>
             </core-selector>
-
+      </div>
   </template>
   <script src="js/parser.js"></script>
   <script>
@@ -119,7 +116,7 @@ A Thelma component for applying mathematical functions on input.
             self._dataAttributes = attributes;
           }
 
-          self._calculateOutput();          
+          self._calculateOutput();
 
       },  
 
@@ -152,11 +149,7 @@ A Thelma component for applying mathematical functions on input.
 
       formulaChanged: function() {
         this._calculateOutput();
-      },
-
-      showControls: function(e) {
-        this.$.ctrl_collapse.toggle();
-      },
+      }
 
     });
   </script>
