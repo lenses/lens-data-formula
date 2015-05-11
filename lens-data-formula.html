@@ -26,7 +26,7 @@ A data transform component for applying a mathematical formula on input.
             <label>Formula:</label>
             <input is="core-input" id="formula" value="{{formula}}" class="formula" placeHolder="e.g. col1 + col2" >
             <label>Name of the new calculated column:</label>
-            <input is="core-input" commitedValue="{{resultColumnName}}" value="result">            
+            <input is="core-input" id="colNameField" committedValue="{{resultColumnName}}">            
             <label>Available columns:</label>
             <core-selector id="col_selector" selected="{{_selectedCol}}" valueattr="label">
               <template repeat="{{attr in _dataAttributes}}">
@@ -89,11 +89,15 @@ A data transform component for applying a mathematical formula on input.
       _functions: [ 'sqrt(x)','log(x)', 'exp(x)' ,'abs(x)', 'round(x)', 'ceil(x)' ,'floor(x)',
                     'sin(x)', 'cos(x)', 'tan(x)', 'asin(x)', 'acos(x)', 'atan(x)'  ],
 
+      observe: {
+        resultColumnName: '_calculateOutput'
+      },
+
       domReady: function() {
         var self = this;
 
         //to render available columns if any
-        this.inputChanged();
+        this.$.colNameField.value = this.resultColumnName;
 
         this.$.col_selector.addEventListener('core-select', function(e) {
           self._colSelected(e);
