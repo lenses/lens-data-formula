@@ -81,6 +81,11 @@ A data transform component for applying a mathematical formula on input.
        */
       formula: '',
 
+      /**
+       * invalid characters to be escaped with _ in variable name [space,(,)]
+       */
+      _invalidCharsRegex: /[\s\(\)]/g,
+
       _functions: [ 'sqrt(x)','log(x)', 'exp(x)' ,'abs(x)', 'round(x)', 'ceil(x)' ,'floor(x)',
                     'sin(x)', 'cos(x)', 'tan(x)', 'asin(x)', 'acos(x)', 'atan(x)'  ],
 
@@ -91,11 +96,11 @@ A data transform component for applying a mathematical formula on input.
         this.inputChanged();
 
         this.$.col_selector.addEventListener('core-select', function(e) {
-          self._colSelected(e).bind(self);
+          self._colSelected(e);
         });
 
         this.$.func_selector.addEventListener('core-select', function(e) {
-          self._funcSelected(e).bind(self);
+          self._funcSelected(e);
         });
 
       },
@@ -115,7 +120,12 @@ A data transform component for applying a mathematical formula on input.
 
             self.output = self.input.map(function(item) {
               var clone = self.$.data_utility.clone(item);
-              var unformatted = self.$.data_utility.unformatObject(clone);
+              //escape space in key names to get valid math formula
+              var spaceEscapedNames = {};
+              for(key in clone) {
+                spaceEscapedNames[key.replace(self._invalidCharsRegex,'_')] = clone[key];
+              }
+              var unformatted = self.$.data_utility.unformatObject(spaceEscapedNames);
               //var ret = self.$.data_utility.unformatObject(clone, false);
               try {
                 clone[self.resultColumnName] = expr.evaluate(unformatted);
@@ -158,7 +168,7 @@ A data transform component for applying a mathematical formula on input.
           return;
         }
         if(self._selectedCol) {
-          self.formula = (self.formula===undefined ? '' : self.formula).concat(' '+self._selectedCol+' ');
+          self.formula = (self.formula===undefined ? '' : self.formula).concat(' '+self._selectedCol.replace( self._invalidCharsRegex,'_')+' ');
         }
         self.$.formula.focus();
 
