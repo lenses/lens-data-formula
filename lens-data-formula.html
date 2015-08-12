@@ -122,6 +122,8 @@ A data transform component for applying a mathematical formula on input.
           }
           return clone;
         });
+
+        self.fire('lens-output-changed' , self.output);
       }
     },
     inputChanged: function () {

@@ -1,4 +1,4 @@
-core-selector {
+iron-selector {
   min-height: 10px;
   display: inline-block;
   max-height: 83px;
@@ -6,18 +6,18 @@ core-selector {
   -webkit-appearance: 
 }
 
-.core-selector::-webkit-scrollbar {
+.iron-selector::-webkit-scrollbar {
     -webkit-appearance: none;
 }
 
-core-selector::-webkit-scrollbar:vertical {
+iron-selector::-webkit-scrollbar:vertical {
     width: 11px;
 }
-core-selector .col {
+iron-selector .col {
   padding: 1px;
   border: 1px solid #EEE;
 }
-core-selector .core-selected {
+iron-selector .iron-selected {
   background-color: #ccc;
 
 }
