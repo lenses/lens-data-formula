@@ -46,27 +46,6 @@ A data transform component for applying a mathematical formula on input.
   Polymer({
     is: 'lens-data-formula',
     properties: {
-      _functions: {
-        type: Array,
-        value: function () {
-          return [
-            'sqrt(x)',
-            'log(x)',
-            'exp(x)',
-            'abs(x)',
-            'round(x)',
-            'ceil(x)',
-            'floor(x)',
-            'sin(x)',
-            'cos(x)',
-            'tan(x)',
-            'asin(x)',
-            'acos(x)',
-            'atan(x)'
-          ];
-        }
-      },
-      _invalidCharsRegex: { value: /[\s\(\)]/g },
       formula: {
         type: String,
         value: '',
@@ -93,7 +72,28 @@ A data transform component for applying a mathematical formula on input.
         value: 'result',
         notify: true,
         observer: '_calculateOutput'
-      }
+      },
+      _functions: {
+        type: Array,
+        value: function () {
+          return [
+            'sqrt(x)',
+            'log(x)',
+            'exp(x)',
+            'abs(x)',
+            'round(x)',
+            'ceil(x)',
+            'floor(x)',
+            'sin(x)',
+            'cos(x)',
+            'tan(x)',
+            'asin(x)',
+            'acos(x)',
+            'atan(x)'
+          ];
+        }
+      },
+      _invalidCharsRegex: { value: /[\s\(\)]/g }
     },
     _calculateOutput: function () {
       var self = this;
@@ -144,9 +144,6 @@ A data transform component for applying a mathematical formula on input.
     },
     _colSelected: function (e) {
       var self = this;
-      if (!e.detail.isSelected) {
-        return;
-      }
       if (self._selectedCol) {
         self.formula = (self.formula === undefined ? '' : self.formula).concat(' ' + self._selectedCol.replace(self._invalidCharsRegex, '_') + ' ');
       }
@@ -154,9 +151,6 @@ A data transform component for applying a mathematical formula on input.
     },
     _funcSelected: function (e) {
       var self = this;
-      if (!e.detail.isSelected) {
-        return;
-      }
       if (self._selectedFunc) {
         self.formula = (self.formula === undefined ? '' : self.formula).concat(' ' + self._selectedFunc.substring(0, self._selectedFunc.length - 2) + ' ');
       }
@@ -172,10 +166,10 @@ A data transform component for applying a mathematical formula on input.
       var self = this;  //to render available columns if any
       //to render available columns if any
       this.$.colNameField.value = this.resultColumnName;
-      this.$.col_selector.addEventListener('core-select', function (e) {
+      this.$.col_selector.addEventListener('iron-select', function (e) {
         self._colSelected(e);
       });
-      this.$.func_selector.addEventListener('core-select', function (e) {
+      this.$.func_selector.addEventListener('iron-select', function (e) {
         self._funcSelected(e);
       });
     }
